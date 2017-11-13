@@ -20,6 +20,7 @@ const Page = db.define('pages', {
     type: Sequelize.TEXT,
     allowNull: false
   },
+  //open == status
   open: {
     type: Sequelize.BOOLEAN,
     defaultValue: false,
@@ -28,6 +29,16 @@ const Page = db.define('pages', {
   date: {
     type: Sequelize.DATE,
     defaultValue: Sequelize.NOW
+  }
+}, {
+  hooks: {
+    beforeValidate: function(page){
+      if(page.title){
+        page.urlTitle = page.title.replace(/\s+/g, '_').replace(/\W/g, '');
+      } else {
+        page.urlTitle = Math.random().toString(36).substring(2, 7);
+      }
+    },
   }
 });
 
@@ -41,7 +52,7 @@ const User = db.define('users', {
     type: Sequelize.STRING,
     isEmail: true,
     allowNull: false
-  }
+  },
 });
 
 
